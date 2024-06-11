@@ -127,7 +127,6 @@ def inject_fixturedefs_for_step(step: Step, fixturemanager: FixtureManager, node
     Finally, we inject them into the request.
     """
     bdd_name = get_step_fixture_name(step=step)
-
     fixturedefs = list(find_fixturedefs_for_step(step=step, fixturemanager=fixturemanager, node=node))
 
     # Sort the fixture definitions by their "path", so that the `bdd_name` fixture will
@@ -137,7 +136,7 @@ def inject_fixturedefs_for_step(step: Step, fixturemanager: FixtureManager, node
         return list(iterparentnodeids(fixture_def.baseid))
 
     fixturedefs.sort(key=lambda x: get_fixture_path(x))
-
+    fixturedefs = [fixturedefs[0]]
     if not fixturedefs:
         yield
         return

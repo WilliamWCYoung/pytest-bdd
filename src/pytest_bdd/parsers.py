@@ -4,10 +4,16 @@ from __future__ import annotations
 
 import abc
 import re as base_re
+import sys
+from decimal import Decimal
+from functools import partial
 from typing import Any, Dict, TypeVar, cast, overload
 
 import parse as base_parse
 from parse_type import cfparse as base_cfparse
+from parse_type.parse import TooManyFields, extract_format, convert_first, int_convert, percentage, DAYS_PAT, \
+    MONTHS_PAT, TIME_PAT, TZ_PAT, date_convert, ALL_MONTHS_PAT, AM_PAT
+
 
 
 class StepParser(abc.ABC):
@@ -59,7 +65,8 @@ class parse(StepParser):
     def __init__(self, name: str, *args: Any, **kwargs: Any) -> None:
         """Compile parse expression."""
         super().__init__(name)
-        self.parser = base_parse.compile(self.name, *args, **kwargs)
+        from pytest_bdd import custom_parse
+        self.parser = custom_parse.compile(self.name, *args, **kwargs)
 
     def parse_arguments(self, name: str) -> dict[str, Any]:
         """Get step arguments.

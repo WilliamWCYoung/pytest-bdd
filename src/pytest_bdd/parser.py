@@ -333,7 +333,8 @@ class Step:
         )
 
         lines = [self._name] + [multilines_content]
-        return "\n".join(lines).strip()
+        lines = [line for line in lines if line]
+        return "\n".join(lines)
 
     def _invalidate_full_name_cache(self) -> None:
         """Invalidate the full_name cache."""
@@ -361,7 +362,6 @@ class Step:
         def replacer(m: Match):
             varname = m.group(1)
             return str(context[varname])
-
         return STEP_PARAM_RE.sub(replacer, self.name)
 
 
